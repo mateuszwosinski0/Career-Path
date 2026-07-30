@@ -2,7 +2,7 @@ import { Moon, Bell, Search } from 'lucide-react';
 
 function Header() {
 return (
-    <header className="flex justify-between items-center px-8 py-5 border-b border-gray-200">
+    <header className="h-16 flex justify-between items-center px-8 py-5 border-b border-gray-200">
         <div>
             <h1 className="text-2xl font-bold">Dashboard</h1>
         </div>
