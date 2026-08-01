@@ -1,9 +1,11 @@
+import UpcomingInterviews from "@/components/Interviews/UpcomingInterviews";
 import RecentApplications from "@/components/RecentApplications/RecentApplications";
 import StatCard from "@/components/StatCard";
 import { FileText, CalendarDays, BriefcaseBusiness, Star } from 'lucide-react';
+import { useApplications } from "@/context/ApplicationsContext";
 const stats = [
   {
-    title: "Applications",
+    title: "Applications", 
     value: 42,
     change: "+12% this month",
     icon: <FileText/>,
@@ -27,7 +29,11 @@ const stats = [
     icon: <Star/>,
   },
 ];
+
+
 function Dashboard() {
+const {applications, handleStatusChange} = useApplications();
+
   return (
     <section className="p-8">
       <div className="mb-8">
@@ -39,16 +45,22 @@ function Dashboard() {
 {stats.map((stat) => (
   <StatCard
   key={stat.title}
-    title={stat.title}
-    value={stat.value}
-    change={stat.change}
-    icon={stat.icon}
+    stat={stat}
   />
 ))}
 </div>
-<RecentApplications />
+<div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-8">
+<RecentApplications 
+applications={applications}
+onStatusChange={handleStatusChange}
+/>
+<UpcomingInterviews
+applications={applications}
+/>
+</div>
     </section>
   );
 }
 
 export default Dashboard;
+
