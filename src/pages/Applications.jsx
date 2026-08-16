@@ -4,10 +4,13 @@ import ApplicationsList from "@/components/ApplicationsPage/ApplicationsList";
 import { useApplications } from "@/context/ApplicationsContext";
 import { useState } from "react";
 import EditApplicationModal from "@/components/ApplicationsPage/EditApplicationModal";
+import DeleteApplicationModal from "@/components/ApplicationsPage/DeleteApplicationModal";
+import ScheduleInterviewModal from "@/components/ApplicationsPage/ScheduleInterviewModal";
+
 
 
 function Applications() {
-  const { applications, handleStatusChange, deleteApplication } = useApplications();
+  const { applications, handleStatusChange, deleteApplication, scheduleInterview } = useApplications();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTerm, setFilterTerm] = useState("All");
@@ -60,8 +63,32 @@ function Applications() {
     setIsEditModalOpen(true);
   }
 
+  const [isDeleteModalOpen , setIsDeleteModalOpen] = useState(false);
+  const [applicationToDelete, setAplicationToDelete] = useState(null);
+
+  function handeleDeleteClick(application){
+    setAplicationToDelete(application);
+    setIsDeleteModalOpen(true);
+  }
+
+  const [interviewApplication, setInterviewApplication] = useState(null);
+function handleApplicationStatusChange(id,newStatus) {
+  const selectedApplication = applications.find(
+    (application) => application.id === id
+  );
+
+  if (!selectedApplication) return;
+
+  if (newStatus === "Interview") {
+    setInterviewApplication(selectedApplication);
+    return;
+  }
+  handleStatusChange(id,newStatus);
+}
+
+
   return (
-    <section className="p-8">
+    <section className="p-4 md:p-8">
       <ApplicationsHeader />
 
       <ApplicationsToolbar
@@ -75,9 +102,9 @@ function Applications() {
 
       <ApplicationsList
         applications={sortedApplications}
-        onStatusChange={handleStatusChange}
+        onStatusChange={handleApplicationStatusChange}
         onEdit={handleEditApplication}
-        onDelete={deleteApplication}
+        onDelete={handeleDeleteClick}
       />
       {isEditModalOpen && selectedApplication && (
         <EditApplicationModal
@@ -88,6 +115,39 @@ function Applications() {
         }} 
 
         />
+      )}
+
+
+      {isDeleteModalOpen && applicationToDelete && (
+        <DeleteApplicationModal
+        application={applicationToDelete}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setAplicationToDelete(null);
+        }}
+        onConfirm={() => {
+          deleteApplication(applicationToDelete.id);
+          setIsDeleteModalOpen(false);
+          setAplicationToDelete(null);
+        }}
+        />
+      )}
+
+      {interviewApplication && (
+        <ScheduleInterviewModal
+        application={interviewApplication}
+        onClose={() => setInterviewApplication(null)}
+          onSave={async(interviewData) =>{
+            const success = await scheduleInterview(
+              interviewApplication.id,
+              interviewData
+            );
+            if (success){
+              setInterviewApplication(null);
+            }
+          }}
+          />
+        
       )}
     </section>
   );

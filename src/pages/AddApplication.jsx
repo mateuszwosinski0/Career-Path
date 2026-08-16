@@ -27,21 +27,27 @@ function AddApplication(){
     navigate("/applications");
   }
 
+return (
+  <section className="p-8">
+    <div className="mb-8">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        Add application
+      </h2>
 
-  return(
-    <section className="p-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold">Add application</h2>
-        <p className="mt-1 text-gray-500">Add a new job application to your tracker.</p>
-       <ApplicationForm
+      <p className="mt-1 text-gray-500 dark:text-gray-400">
+        Add a new job application to your tracker.
+      </p>
+
+      <ApplicationForm
         formData={formData}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        navigate={navigate}
-    />
+        submitLabel="Save application"
+        onCancel={() => navigate("/applications")}
+      />
     </div>
-    </section>
-  )
+  </section>
+);
 }
 
 export default AddApplication
