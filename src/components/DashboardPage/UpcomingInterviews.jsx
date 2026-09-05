@@ -35,12 +35,14 @@ const {t} = useLanguage();
            {t("dashboard", "noUpcomingInterviews")}
         </p>
       ) : (
-        upcomingInterviews.map((application) => (
+        <div className="flex flex-col gap-3">
+        {upcomingInterviews.map((application) => (
           <InterviewItem
             key={application.id}
             application={application}
           />
-        ))
+        ))}
+        </div>
       )}
     </section>
   );

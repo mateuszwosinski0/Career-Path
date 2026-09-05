@@ -13,12 +13,22 @@ import ApplicationsListSkeleton from "@/components/ApplicationsPage/Applications
 function Applications() {
   const { applications, handleStatusChange, deleteApplication, scheduleInterview,loading  } = useApplications();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get("q") || "";
+
+  function setSearchTerm(value) {
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      if (value) next.set("q", value);
+      else next.delete("q");
+      return next;
+    }, { replace: true });
+  }
   const [filterTerm, setFilterTerm] = useState("All");
   const [sortTerm, setSortTerm] = useState("Newest");
 
   const filteredApplications = applications.filter((application) => {
-    const search = searchTerm.toLowerCase();
+    const search = searchTerm.trim().toLowerCase();
 
     const matchesSearch =
       application.company.toLowerCase().includes(search) ||
@@ -32,13 +42,13 @@ function Applications() {
 
   const sortedApplications = [...filteredApplications];
 
-  if (sortTerm === "Company A-Z") {
+  if (sortTerm === "Company-A-Z") {
     sortedApplications.sort((a, b) =>
       a.company.localeCompare(b.company)
     );
   }
 
-  if (sortTerm === "Company Z-A") {
+  if (sortTerm === "Company-Z-A") {
     sortedApplications.sort((a, b) =>
       b.company.localeCompare(a.company)
     );
@@ -89,14 +99,17 @@ function handleApplicationStatusChange(id,newStatus) {
 
 
 
-const [searchParams, setSearchParams] = useSearchParams();
 const highlightId = searchParams.get("highlight")
 
 useEffect(() => {
   if (!highlightId) return;
 
   const timeout = setTimeout(() => {
-    setSearchParams({});
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      next.delete("highlight");
+      return next;
+    }, { replace: true });
   }, 3000);
 
   return () => clearTimeout(timeout);

@@ -22,14 +22,16 @@ function RecentApplications({ applications, onStatusChange }) {
   {t("applications", "noApplications")}
   </div>
   ) : (
-      applications.slice(0, 3).map((application) => (
+      <div className="flex flex-col gap-3">
+      {applications.slice(0, 3).map((application) => (
         <ApplicationItem
           key={application.id}
           application={application}
           onStatusChange={onStatusChange}
         />
-      )
       ))}
+      </div>
+      )}
       
     </section>
   );
