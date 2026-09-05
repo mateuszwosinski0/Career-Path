@@ -2,15 +2,16 @@ import ApplicationsHeader from "@/components/ApplicationsPage/ApplicationsHeader
 import ApplicationsToolbar from "@/components/ApplicationsPage/ApplicationsToolbar";
 import ApplicationsList from "@/components/ApplicationsPage/ApplicationsList";
 import { useApplications } from "@/context/ApplicationsContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditApplicationModal from "@/components/ApplicationsPage/EditApplicationModal";
 import DeleteApplicationModal from "@/components/ApplicationsPage/DeleteApplicationModal";
 import ScheduleInterviewModal from "@/components/ApplicationsPage/ScheduleInterviewModal";
-
+import { useSearchParams } from "react-router-dom";
+import ApplicationsListSkeleton from "@/components/ApplicationsPage/ApplicationsLIstSkeleton";
 
 
 function Applications() {
-  const { applications, handleStatusChange, deleteApplication, scheduleInterview } = useApplications();
+  const { applications, handleStatusChange, deleteApplication, scheduleInterview,loading  } = useApplications();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTerm, setFilterTerm] = useState("All");
@@ -87,6 +88,23 @@ function handleApplicationStatusChange(id,newStatus) {
 }
 
 
+
+const [searchParams, setSearchParams] = useSearchParams();
+const highlightId = searchParams.get("highlight")
+
+useEffect(() => {
+  if (!highlightId) return;
+
+  const timeout = setTimeout(() => {
+    setSearchParams({});
+  }, 3000);
+
+  return () => clearTimeout(timeout);
+}, [highlightId, setSearchParams]);
+
+
+
+
   return (
     <section className="p-4 md:p-8">
       <ApplicationsHeader />
@@ -99,13 +117,22 @@ function handleApplicationStatusChange(id,newStatus) {
         sortTerm={sortTerm}
         setSortTerm={setSortTerm}
       />
+      
+      {loading ? (
+        <ApplicationsListSkeleton/>
+      ): (
 
+      
       <ApplicationsList
         applications={sortedApplications}
+          hasApplications={applications.length > 0}
         onStatusChange={handleApplicationStatusChange}
         onEdit={handleEditApplication}
         onDelete={handeleDeleteClick}
+        highlightId={highlightId}
+          
       />
+      )}
       {isEditModalOpen && selectedApplication && (
         <EditApplicationModal
         application={selectedApplication}

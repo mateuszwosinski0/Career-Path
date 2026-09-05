@@ -2,11 +2,11 @@ import { useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import { useApplications } from "@/context/ApplicationsContext";
 import ApplicationForm from "@/components/ApplicationsPage/ApplicationForm";
-
+import { useLanguage } from "@/context/LanguageContext";
 function AddApplication(){
   const {addApplication } = useApplications();
   const navigate = useNavigate();
-
+const {t} = useLanguage();
   const [formData, setFormData] = useState({
     company: "",
     position: "",
@@ -31,18 +31,18 @@ return (
   <section className="p-8">
     <div className="mb-8">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-        Add application
+       {t("applications", "addApplication")}
       </h2>
 
       <p className="mt-1 text-gray-500 dark:text-gray-400">
-        Add a new job application to your tracker.
+        {t("applications","addApplicationDescription")}
       </p>
 
       <ApplicationForm
         formData={formData}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        submitLabel="Save application"
+          submitLabel={t("applications", "addApplication")}
         onCancel={() => navigate("/applications")}
       />
     </div>

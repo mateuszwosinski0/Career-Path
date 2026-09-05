@@ -8,25 +8,27 @@ import {
   X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
-  const navItems = [
-    {
-      name: "Dashboard",
-      path: "/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Applications",
-      path: "/applications",
-      icon: BriefcaseBusiness,
-    },
-    {
-      name: "Settings",
-      path: "/settings",
-      icon: Settings,
-    },
-  ];
+  const { t } = useLanguage();
+ const navItems = [
+  {
+    name: t("navigation", "dashboard"),
+    path: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    name: t("navigation", "applications"),
+    path: "/applications",
+    icon: BriefcaseBusiness,
+  },
+  {
+    name: t("navigation", "settings"),
+    path: "/settings",
+    icon: Settings,
+  },
+];
 
   const { profile} = useAuth();
 

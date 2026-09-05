@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import DropDown from "@/components/common/Dropdown";
+import { useLanguage } from "@/context/LanguageContext";
+import useEscapeKey from "@/hooks/useEscapeKey";
 function ScheduleInterviewModal({
     application,
     onClose,
@@ -11,7 +13,7 @@ function ScheduleInterviewModal({
         time: "",
         type: "Online",
     });
-
+const { t } = useLanguage();
     function handleChange(e) {
         const {name,value} = e.target;
 
@@ -26,8 +28,10 @@ async function handleSubmit(e) {
   await onSave(formData);
 }
 
-    if (!application) return null;
+    
 
+useEscapeKey(onClose);
+if (!application) return null;
     return(
 
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
@@ -36,7 +40,7 @@ async function handleSubmit(e) {
                 <div className="mb-6 flex items-center justify-between">
                     <div>
                         <h2 className="text-xl font-bold">
-                            Schedule interview
+                           {t("applications", "scheduleInterview")}
                         </h2>
                         <p className="mt-1 text-sm text-gray-500">
                             {application.company} — {application.position}
@@ -52,7 +56,7 @@ async function handleSubmit(e) {
 
                     <label className="flex flex-col gap-2">
                         <span className="text-sm font-medium">
-                            Interview date
+                          {t("applications", "interviewDate")}
                         </span>
 
                         <input type="date" name="date" value={formData.date} onChange={handleChange} required
@@ -61,7 +65,7 @@ async function handleSubmit(e) {
 
                     <label className="flex flex-col gap-2">
                         <span className="text-sm font-medium">
-                            Interview time
+                          {t("applications", "interviewTime")}
                         </span>
 
                         <input type="time" name="time" value={formData.time} onChange={handleChange} required
@@ -70,7 +74,7 @@ async function handleSubmit(e) {
 
                     <label className="flex flex-col gap-2">
                         <span className="text-sm font-medium">
-                            Interview type
+                           {t("applications", "interviewType")}
                         </span>
 
                         <DropDown
@@ -81,21 +85,30 @@ async function handleSubmit(e) {
       type: value,
     }))
   }
-  options={[
-    { value: "Online", label: "Online" },
-    { value: "On-site", label: "On-site" },
-    { value: "Phone", label: "Phone" },
-  ]}
+options={[
+  {
+    value: "Online",
+    label: t("interviewTypes", "online"),
+  },
+  {
+    value: "On-site",
+    label: t("interviewTypes", "onSite"),
+  },
+  {
+    value: "Phone",
+    label: t("interviewTypes", "phone"),
+  },
+]}
 />
                     </label>
 
                     <div className="flex justify-end gap-3 pt-4">
                         <button type="button" onClick={onClose} className="rounded-lg border border-gray-300 px-4 py-2 text-sm dark:border-gray-700">
-                            Cancel
+                            {t("common", "cancel")}
                         </button>
 
                         <button type="submit"  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                            Schedule interview
+                            {t("applications", "scheduleInterview")}
                         </button>
                     </div>
 

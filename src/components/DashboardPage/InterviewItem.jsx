@@ -1,5 +1,5 @@
 import { formatDate } from "@/utils/formatDate";
-
+import { useLanguage } from "@/context/LanguageContext";
 function InterviewItem({ application }) {
   const {
     company,
@@ -9,6 +9,13 @@ function InterviewItem({ application }) {
 
   const { date, time, type } = interviewDetails;
 
+const { t } = useLanguage();
+
+const interviewTypeKeys = {
+  Online: "online",
+  "On-site": "onSite",
+  Phone: "phone",
+};
   const formattedTime = time?.slice(0, 5);
 
   return (
@@ -29,7 +36,7 @@ function InterviewItem({ application }) {
         </div>
 
         <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-          {type}
+           {t("interviewTypes", interviewTypeKeys[type])}
         </span>
       </div>
     </div>

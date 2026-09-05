@@ -1,30 +1,48 @@
 import { SquarePen, Trash2 } from "lucide-react";
 import StatusDropdown from "@/components/common/StatusDropDown";
 import { formatDate } from "@/utils/formatDate";
+import { useEffect, useRef } from "react";
 
 function ApplicationRow({
   application,
   onStatusChange,
   onEdit,
   onDelete,
+  isHighlighted,
+
 }) {
   const { company, position, status, appliedAt } = application;
+const rowRef = useRef(null);
 
+useEffect(() => {
+  if (isHighlighted && rowRef.current) {
+    rowRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
+}, [isHighlighted]);
   return (
-    <div
-      className="
+    <div ref={rowRef}
+      className={`
         border-b border-gray-200 px-4 py-4
         transition-colors last:border-b-0
         hover:bg-gray-50
         dark:border-gray-800 dark:hover:bg-gray-800/50
         sm:px-6
         md:grid
-        md:grid-cols-[1.5fr_2fr_1fr_1fr_100px]
+        md:grid-cols-[1.5fr_2fr_1fr_1fr_220px]
         md:items-center
         md:gap-4
-      "
+
+        ${
+          isHighlighted
+          ? "bg-blue-50 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/20 dark:ring-blue-900"
+          : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+        }
+      `}
     >
-      {/* Mobile */}
+      
       <div className="md:hidden">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
@@ -38,6 +56,8 @@ function ApplicationRow({
           </div>
 
           <div className="flex shrink-0 items-center gap-1">
+         
+
             <button
               type="button"
               onClick={() => onEdit(application)}
@@ -72,7 +92,7 @@ function ApplicationRow({
         </div>
       </div>
 
-      {/* Desktop */}
+      
       <span className="hidden font-semibold text-gray-900 dark:text-gray-100 md:block">
         {company}
       </span>
@@ -95,24 +115,25 @@ function ApplicationRow({
       </span>
 
       <div className="hidden items-center justify-end gap-1 md:flex">
-        <button
-          type="button"
-          onClick={() => onEdit(application)}
-          className="rounded-md p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          aria-label={`Edit ${company}`}
-        >
-          <SquarePen size={18} />
-        </button>
 
-        <button
-          type="button"
-          onClick={() => onDelete(application)}
-          className="rounded-md p-2 text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
-          aria-label={`Delete ${company}`}
-        >
-          <Trash2 size={18} />
-        </button>
-      </div>
+  <button
+    type="button"
+    onClick={() => onEdit(application)}
+    className="rounded-md p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+    aria-label={`Edit ${company}`}
+  >
+    <SquarePen size={18} />
+  </button>
+
+  <button
+    type="button"
+    onClick={() => onDelete(application)}
+    className="rounded-md p-2 text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+    aria-label={`Delete ${company}`}
+  >
+    <Trash2 size={18} />
+  </button>
+</div>
     </div>
   );
 }

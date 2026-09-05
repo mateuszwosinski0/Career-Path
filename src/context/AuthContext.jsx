@@ -60,6 +60,7 @@ function AuthProvider({children}) {
 
   if (!error) {
     setUser(null);
+    setProfile(null);
   }
 
   return { error };
@@ -77,29 +78,33 @@ async function updatePassword(newPassword) {
     });
 }
 
-async function getProfile(userId) {
-    const {data, error} = await supabase
-    .from("profiles")
-    .select("id, username, created_at")
-    .eq("id", userId)
-    .single();
+useEffect(() => {
+  if (!user) return;
 
-    if(error) {
-        console.error("Error fetching profile", error);
-        return;
+  async function getProfile() {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select(`
+        id,
+        username,
+        created_at,
+        email_notifications,
+        browser_notifications,
+        application_reminders
+      `)
+      .eq("id", user.id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching profile", error);
+      return;
     }
 
     setProfile(data);
-}
+  }
 
-useEffect(()=>{
-    if (!user){
-        setProfile(null);
-        return;
-    }
-
-    getProfile(user.id);
-},  [user])
+  getProfile();
+}, [user]);
 
 
 async function updateProfile(username) {
@@ -111,15 +116,58 @@ async function updateProfile(username) {
     .update({
         username,
     })
-    eq("id", user.id)
+    .eq("id", user.id)
     .select()
     .single();
+
+      if (!error) {
+    setProfile(data);
+  }
+  
     return {data, error}
 }
 
+
+async function updateNotificationSettings(settings) {
+  if (!user) {
+    return {
+      error: new Error("User is not authenticated"),
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      email_notifications: settings.email,
+      browser_notifications: settings.browser,
+      application_reminders: settings.reminders,
+    })
+    .eq("id", user.id)
+    .select(`
+      id,
+      username,
+      created_at,
+      email_notifications,
+      browser_notifications,
+      application_reminders
+    `)
+    .single();
+
+  if (error) {
+    console.error("Error updating notification settings:", error);
+    return { error };
+  }
+
+  setProfile(data);
+
+  return {
+    data,
+    error: null,
+  };
+}
     return (
         <AuthContext.Provider 
-        value={{user, profile, loading, signUp, signIn, signOut, resetPassword, updatePassword, updateProfile}}>
+        value={{user, profile, loading, signUp, signIn, signOut, resetPassword, updatePassword, updateProfile, updateNotificationSettings,}}>
             {children}
         </AuthContext.Provider>
     )

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { X, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-
+import { useLanguage } from "@/context/LanguageContext";
+import useEscapeKey from "@/hooks/useEscapeKey";
 function ChangePasswordModal({ onClose }) {
   const { updatePassword } = useAuth();
 
@@ -12,6 +13,9 @@ function ChangePasswordModal({ onClose }) {
   const [saving, setSaving] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const {t} = useLanguage();
+  const modalRef = useRef(null);
+  useEscapeKey(onClose);
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -19,12 +23,12 @@ function ChangePasswordModal({ onClose }) {
     setSuccess("");
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+        setError(t("settings", "passwordMinLength"));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("settings", "passwordsDoNotMatch"));
       return;
     }
 
@@ -39,7 +43,7 @@ function ChangePasswordModal({ onClose }) {
       return;
     }
 
-    setSuccess("Password changed successfully.");
+   setSuccess(t("settings", "passwordChanged"));
 
     setTimeout(() => {
       onClose();
@@ -48,17 +52,17 @@ function ChangePasswordModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900 sm:p-6">
+      <div ref={modalRef} className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900 sm:p-6">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            Change password
+            {t("settings", "changePassword")}
           </h2>
 
           <button
             type="button"
             onClick={onClose}
             className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="Close modal"
+           aria-label={t("settings", "closeModal")}
           >
             <X size={20} />
           </button>
@@ -67,7 +71,7 @@ function ChangePasswordModal({ onClose }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="flex flex-col gap-2">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              New password
+             {t("settings", "newPassword")}
             </span>
 
            <div className="relative">
@@ -83,7 +87,11 @@ function ChangePasswordModal({ onClose }) {
     type="button"
     onClick={() => setShowPassword((current) => !current)}
     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-    aria-label={showPassword ? "Hide password" : "Show password"}
+    aria-label={
+  showPassword
+    ? t("settings", "hidePassword")
+    : t("settings", "showPassword")
+}
   >
     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
   </button>
@@ -92,7 +100,7 @@ function ChangePasswordModal({ onClose }) {
 
           <label className="flex flex-col gap-2">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Confirm new password
+             {t("settings", "confirmNewPassword")}
             </span>
 
            <div className="relative">
@@ -111,8 +119,10 @@ function ChangePasswordModal({ onClose }) {
     }
     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
     aria-label={
-      showConfirmPassword ? "Hide password" : "Show password"
-    }
+  showConfirmPassword
+    ? t("settings", "hidePassword")
+    : t("settings", "showPassword")
+}
   >
     {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
   </button>
@@ -137,7 +147,7 @@ function ChangePasswordModal({ onClose }) {
               onClick={onClose}
               className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
             >
-              Cancel
+             {t("settings","cancel")}
             </button>
 
             <button
@@ -145,7 +155,7 @@ function ChangePasswordModal({ onClose }) {
               disabled={saving}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {saving ? "Saving..." : "Change password"}
+             {t("settings","changePassword")}
             </button>
           </div>
         </form>

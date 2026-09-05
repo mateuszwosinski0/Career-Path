@@ -1,37 +1,40 @@
 import {  Monitor, Moon, Sun } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
-const themes = [
-    {
-        id:"light",
-        title: "Light",
-        description: "Always use the light apperance.",
-        icon: Sun,
-    },
 
+function AppearanceSettings({ theme, onThemeChange }) {
+  const { t } = useLanguage();
+
+  const themes = [
     {
-        id: "dark", 
-        title: "Dark",
-        description:"Always use the dark apperance.",
-        icon:Moon,
+      id: "light",
+      title: t("settings", "light"),
+      description: t("settings", "lightDescription"),
+      icon: Sun,
     },
     {
-        id: "system",
-        title: "System",
-        description: "Follow your operating system theme",
-        icon: Monitor,
+      id: "dark",
+      title: t("settings", "dark"),
+      description: t("settings", "darkDescription"),
+      icon: Moon,
     },
-]
-
-function AppearanceSettings({theme, onThemeChange}) {
+    {
+      id: "system",
+      title: t("settings", "system"),
+      description: t("settings", "systemDescription"),
+      icon: Monitor,
+    },
+  ];
+ 
     return(
         <section className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
             <div className="mb-6">
               <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-  Appearance
+  {t("settings", "appearance")}
 </h2>
 
 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-  Choose how CareerPath AI looks on your device.
+{t("settings", "appearanceDescription")}
 </p>
             </div>
 

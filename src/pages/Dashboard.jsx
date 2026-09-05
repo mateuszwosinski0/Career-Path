@@ -6,11 +6,12 @@ import { useApplications } from "@/context/ApplicationsContext";
 import { useState } from "react";
 import ScheduleInterviewModal from "@/components/ApplicationsPage/ScheduleInterviewModal";
 import { useAuth } from "@/context/AuthContext";
-
-
+import { useLanguage } from "@/context/LanguageContext";
+import { StatsSkeleton, DashboardContentSkeleton } from "@/components/DashboardPage/DashboardSkeleton";
 
 function Dashboard() {
-const {applications, handleStatusChange, scheduleInterview} = useApplications();
+  const {t} = useLanguage();
+const {applications, handleStatusChange, scheduleInterview, loading} = useApplications();
 
 const {profile} = useAuth();
 const [interviewApplication, setInterviewApplication] = useState(null);
@@ -52,54 +53,65 @@ const responseRate = applicationCount === 0
 
 const stats = [
   {
-    title: "Applications", 
+    title: t("dashboard", "applications"),
     value: applicationCount,
-    change: "Total applications",
-    icon: <FileText/>,
+    change: t("dashboard", "applicationsChange"),
+    icon: <FileText />,
   },
   {
-    title: "Interviews",
+    title: t("dashboard", "interviews"),
     value: InterviewCount,
-    change: "Current interviews",
-    icon: <CalendarDays/>,
+    change: t("dashboard", "interviewsChange"),
+    icon: <CalendarDays />,
   },
   {
-    title: "Offers",
+    title: t("dashboard", "offers"),
     value: offersCount,
-    change: "Received offers",
-    icon: <BriefcaseBusiness/>,
+    change: t("dashboard", "offersChange"),
+    icon: <BriefcaseBusiness />,
   },
   {
-    title: "Response Rate",
+    title: t("dashboard", "responseRate"),
     value: `${responseRate}%`,
-    change: "Appllications with response",
-    icon: <Star/>,
+    change: t("dashboard", "responseRateChange"),
+    icon: <Star />,
   },
 ];
   return (
+    
     <section className="p-4 md:p-8">
+   
       <div className="mb-6 md:mb-8">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl">Welcome back, {profile?.username} </h2>
-        <p className="mt-1 font-bold text-gray-500 dark:text-gray-400 md:text-base">Here's what's happening with your job search today.</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl">{t("dashboard", "title")} {profile?.username} </h2>
+        <p className="mt-1 font-bold text-gray-500 dark:text-gray-400 md:text-base">{t("dashboard", "description")}</p>
       </div>
 
    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
-{stats.map((stat) => (
-  <StatCard
-  key={stat.title}
-    stat={stat}
-  />
-))}
+  {loading ? (
+    <StatsSkeleton />
+  ) : (
+    stats.map((stat) => (
+      <StatCard
+        key={stat.title}
+        stat={stat}
+      />
+    ))
+  )}
 </div>
-<div className="mt-6 grid grid-cols-1 gap-4 md:gap-6 xl:mt-8 xl:grid-cols-2">
-<RecentApplications 
-applications={applications}
-onStatusChange={handleDashboardStatusChange}
-/>
-<UpcomingInterviews
-applications={applications}
-/>
-</div>
+{loading ? (
+  <DashboardContentSkeleton />
+) : (
+  <div className="mt-6 grid grid-cols-1 gap-4 md:gap-6 xl:mt-8 xl:grid-cols-2">
+    <RecentApplications 
+      applications={applications}
+      onStatusChange={handleDashboardStatusChange}
+    />
+
+    <UpcomingInterviews
+      applications={applications}
+    />
+  </div>
+)}
 
 {interviewApplication && (
   <ScheduleInterviewModal

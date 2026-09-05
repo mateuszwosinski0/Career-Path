@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import DropDown from "@/components/common/Dropdown";
+import { useLanguage } from "@/context/LanguageContext";
 function ApplicationsToolbar({
   searchTerm,
   setSearchTerm,
@@ -8,20 +9,49 @@ function ApplicationsToolbar({
   sortTerm,
   setSortTerm,
 }) {
+
+  const { t } = useLanguage();
 const statusOptions = [
-  {value: "All", label: "All statuses"},
-  {value: "Applied", label: "Applied"},
-  {value: "Interview", label: "Interview"},
-  {value: "Offer", label: "Offer"},
-  {value: "Rejected", label: "Rejected"},
+  {
+    value: "All",
+    label: t("applications", "allStatuses"),
+  },
+  {
+    value: "Applied",
+    label: t("applications", "statusApplied"),
+  },
+  {
+    value: "Interview",
+    label: t("applications", "statusInterview"),
+  },
+  {
+    value: "Offer",
+    label: t("applications", "statusOffer"),
+  },
+  {
+    value: "Rejected",
+    label: t("applications", "statusRejected"),
+  },
 ];
 
 const sortOptions = [
-  {value: "Company-A-Z", label: "Company-A-Z"},
-  {value: "Company-Z-A", label: "Company-Z-A"},
-  {value: "Newest", label: "Newest"},
-  {value: "Oldest", label: "Oldest"},
-]
+  {
+    value: "Company-A-Z",
+    label: t("applications", "companyAZ"),
+  },
+  {
+    value: "Company-Z-A",
+    label: t("applications", "companyZA"),
+  },
+  {
+    value: "Newest",
+    label: t("applications", "newest"),
+  },
+  {
+    value: "Oldest",
+    label: t("applications", "oldest"),
+  },
+];
 
 
   return (
@@ -37,7 +67,7 @@ const sortOptions = [
 
         <input
           className="h-10 w-full rounded-lg border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 sm:w-72"
-          placeholder="Search..."
+          placeholder={t("common", "search")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

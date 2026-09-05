@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
-
-
+import useClickOutside from "@/hooks/useClickOutside";
+import useEscapeKey from "@/hooks/useEscapeKey";
+import useDropdownKeyboard from "@/hooks/useDropdownKeyboard";
 function DropDown({
     value, onChange, options, className = "",
 }) {
@@ -9,31 +10,16 @@ function DropDown({
     
     const dropDownRef = useRef(null);
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (
-                dropDownRef.current &&
-                !dropDownRef.current.contains(event.target)
-            ) {
-                setIsOpen(false);
-            }
-        }
-
-        function handleKeyDown(event){
-            if (event.key === "Escape"){
-                setIsOpen(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    },[]);
-    
+  useClickOutside(dropDownRef, () => {
+   setIsOpen(false);
+  });
+  useEscapeKey(() => setIsOpen(false));
+const { activeIndex, resetActiveIndex } = useDropdownKeyboard({
+  isOpen,
+  options,
+  value,
+  onSelect: handleSelect,
+});
 
     const selectedOption = options.find (
         (option) => option.value === value
@@ -43,11 +29,18 @@ function DropDown({
         onChange(option.value);
         setIsOpen(false);
     }
+    function handleToggle() {
+  if (!isOpen) {
+    resetActiveIndex();
+  }
+
+  setIsOpen((current) => !current);
+}
 
     return (
         <div ref={dropDownRef} className={`relative w-full sm:w-auto ${className}`}>
 
-            <button type="button" onClick={()=> setIsOpen((current) => !current)}
+            <button type="button" onClick={handleToggle}
             className="flex h-10 w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-gray-900 transition-colors hover:border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:hover:border-gray-600"
             aria-haspopup="listbox"
             aria-expanded={isOpen}>
@@ -64,12 +57,16 @@ function DropDown({
             {isOpen && (
                 <div className="dropdown-in absolute left-0 top-full z-50 mt-2 w-full min-w-full origin-top overflow-hidden rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-900 sm:min-w-40" 
                 role="listbox">
-                    {options.map((option) => {
+                    {options.map((option,index) => {
                         const isSelected = option.value === value;
 
                         return (
                             <button key={option.value} type="button" onClick={()=> handleSelect(option)}
-                            className="flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-sm text-gray-900 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
+                           className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-sm text-gray-900 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 ${
+  index === activeIndex
+    ? "bg-gray-100 dark:bg-gray-700"
+    : ""
+}`}
                             role="option" aria-selected={isSelected}>
                                 <span>{option.label}</span>
 

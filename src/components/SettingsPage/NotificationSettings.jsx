@@ -1,53 +1,104 @@
+import { useAuth } from "@/context/AuthContext";
+import { subscribeToPush} from "@/utils/pushNotifications";
+import { useLanguage } from "@/context/LanguageContext";
+
+
+function NotificationSettings({ profile }) {
+  const { user, updateNotificationSettings } = useAuth();
+const {t} = useLanguage();
+
 const notificationOptions = [
   {
-    id: "email",
-    title: "Email notifications",
-    description: "Receive updates by email.",
+    id: "reminders",
+    title: t("settings", "applicationReminders"),
+    description: t(
+      "settings",
+      "applicationRemindersDescription"
+    ),
   },
   {
     id: "browser",
-    title: "Browser notifications",
-    description: "Show browser notifications.",
+    title: t("settings", "browserNotifications"),
+    description: t(
+      "settings",
+      "browserNotificationsDescription"
+    ),
   },
   {
-    id: "reminders",
-    title: "Application reminders",
-    description: "Get reminders about pending applications.",
+    id: "email",
+    title: t("settings", "emailNotifications"),
+    description: t(
+      "settings",
+      "emailNotificationsDescription"
+    ),
   },
 ];
 
-function NotificationSettings({
-  notifications,
-  setNotifications,
-}) {
-  function handleToggle(id) {
-    setNotifications((currentNotifications) => ({
-      ...currentNotifications,
-      [id]: !currentNotifications[id],
-    }));
+async function handleToggle(id) {
+  if (id === "browser" && !profile?.browser_notifications) {
+    if (!user) return;
+
+    const { error } = await subscribeToPush(user.id);
+
+    if (error) {
+      console.error("Push subscription error:", error);
+      return;
+    }
   }
+
+  const settings = {
+    email: profile?.email_notifications ?? true,
+    browser: profile?.browser_notifications ?? false,
+    reminders: profile?.application_reminders ?? true,
+  };
+
+  settings[id] = !settings[id];
+
+  const { error } = await updateNotificationSettings(settings);
+
+  if (error) {
+    console.error("Notification settings error:", error);
+  }
+}
+
+
+const visibleNotificationOptions =
+  profile?.application_reminders
+    ? notificationOptions
+    : notificationOptions.filter(
+        (option) => option.id === "reminders"
+      );
 
   return (
     <section className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
       <div className="mb-2">
        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-  Notifications
+  {t("settings", "notifications")}
 </h2>
 
 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-  Choose how you would like to receive updates.
+  {t("settings", "notificationsDescription")}
 </p>
       </div>
 
       <div>
-        {notificationOptions.map((option) => {
-          const isEnabled = notifications[option.id];
+        {visibleNotificationOptions.map((option) => {
+         const isEnabled =
+  option.id === "email"
+    ? profile?.email_notifications
+    : option.id === "browser"
+      ? profile?.browser_notifications
+      : profile?.application_reminders;
 
           return (
             <div
-              key={option.id}
-              className="flex items-center justify-between gap-6 border-b border-gray-200 py-5 last:border-b-0 dark:border-gray-800"
-            >
+  key={option.id}
+  className={`flex items-center justify-between gap-6 border-b border-gray-200 py-5 last:border-b-0 dark:border-gray-800 ${
+    option.id !== "reminders"
+      ? "ml-4 border-l-2 border-l-gray-200 pl-4 dark:border-l-gray-700"
+      : ""
+  }`}
+>
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {option.title}
@@ -62,6 +113,7 @@ function NotificationSettings({
   type="button"
   role="switch"
   aria-checked={isEnabled}
+   aria-label={option.title}
   onClick={() => handleToggle(option.id)}
   className={`
     relative h-7 w-12 shrink-0 rounded-full
@@ -79,7 +131,10 @@ function NotificationSettings({
     `}
   />
 </button>
+
+
             </div>
+            
           );
         })}
       </div>

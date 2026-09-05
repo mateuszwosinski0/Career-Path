@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Eye, EyeOff } from "lucide-react";
+import {  Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 function ResetPassword() {
