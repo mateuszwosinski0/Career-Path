@@ -21,15 +21,21 @@ function App() {
 
        <Route
         element={
-          <ProtectedRoute>
             <AppLayout />
-          </ProtectedRoute>
+          
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/applications" element={<Applications />} />
         <Route path="/applications/new" element={<AddApplication />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route
+  path="/settings"
+  element={
+    <ProtectedRoute>
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
       </Route>
     </Routes>
   );

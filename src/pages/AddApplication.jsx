@@ -7,12 +7,24 @@ function AddApplication(){
   const {addApplication } = useApplications();
   const navigate = useNavigate();
 const {t} = useLanguage();
-  const [formData, setFormData] = useState({
-    company: "",
-    position: "",
-    status: "Applied",
-    appliedAt: "",
-  });
+const [formData, setFormData] = useState({
+  company: "",
+  position: "",
+  status: "Applied",
+  appliedAt: "",
+  offerUrl: "",
+  location: "",
+workMode: "",
+salaryMin: "",
+salaryMax: "",
+salaryCurrency: "",
+salaryPeriod: "",
+notes: "",
+  interviewDate: "",
+  interviewTime: "",
+  interviewType: "Online",
+
+});
   function handleChange(e) {
     const {name, value} = e.target;
     setFormData((currentFormData) =>({
@@ -21,11 +33,15 @@ const {t} = useLanguage();
     }));
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    addApplication(formData);
+  async function handleSubmit(e) {
+  e.preventDefault();
+
+  const success = await addApplication(formData);
+
+  if (success) {
     navigate("/applications");
   }
+}
 
 return (
   <section className="p-8">

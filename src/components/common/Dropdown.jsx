@@ -3,6 +3,7 @@ import { Check, ChevronDown } from "lucide-react";
 import useClickOutside from "@/hooks/useClickOutside";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import useDropdownKeyboard from "@/hooks/useDropdownKeyboard";
+import useDropdownPosition from "@/hooks/useDropdownPosition";
 function DropDown({
     value, onChange, options, className = "",
 }) {
@@ -20,6 +21,7 @@ const { activeIndex, resetActiveIndex } = useDropdownKeyboard({
   value,
   onSelect: handleSelect,
 });
+const menuRef = useDropdownPosition(isOpen, dropDownRef, activeIndex);
 
     const selectedOption = options.find (
         (option) => option.value === value
@@ -55,7 +57,7 @@ const { activeIndex, resetActiveIndex } = useDropdownKeyboard({
             </button>
 
             {isOpen && (
-                <div className="dropdown-in absolute left-0 top-full z-50 mt-2 w-full min-w-full origin-top overflow-hidden rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-900 sm:min-w-40" 
+                <div ref={menuRef} className="dropdown-in absolute left-0 z-50 w-full min-w-full overflow-y-auto overscroll-contain rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-900"
                 role="listbox">
                     {options.map((option,index) => {
                         const isSelected = option.value === value;

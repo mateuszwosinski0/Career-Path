@@ -1,29 +1,28 @@
 import { SquarePen, Trash2 } from "lucide-react";
 import StatusDropdown from "@/components/common/StatusDropDown";
 import { formatDate } from "@/utils/formatDate";
-import { useEffect, useRef } from "react";
 
 function ApplicationRow({
   application,
   onStatusChange,
   onEdit,
   onDelete,
-  isHighlighted,
-
+ onOpenDetails,
 }) {
   const { company, position, status, appliedAt } = application;
-const rowRef = useRef(null);
-
-useEffect(() => {
-  if (isHighlighted && rowRef.current) {
-    rowRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-  }
-}, [isHighlighted]);
   return (
-    <div ref={rowRef}
+    <div
+    onClick={(event) => {
+  if (
+    event.target.closest(
+      "button, a, input, select, textarea, [role='listbox']",
+    )
+  ) {
+    return;
+  }
+
+  onOpenDetails(application);
+}}
       className={`
         border-b border-gray-200 px-4 py-4
         transition-colors last:border-b-0
@@ -34,12 +33,8 @@ useEffect(() => {
         md:grid-cols-[1.5fr_2fr_1fr_1fr_220px]
         md:items-center
         md:gap-4
+        cursor-pointer
 
-        ${
-          isHighlighted
-          ? "bg-blue-50 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/20 dark:ring-blue-900"
-          : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
-        }
       `}
     >
       
@@ -47,7 +42,14 @@ useEffect(() => {
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h3 className="truncate font-semibold text-gray-900 dark:text-gray-100">
-              {company}
+              <button
+  type="button"
+  onClick={() => onOpenDetails(application)}
+  aria-haspopup="dialog"
+  className="max-w-full cursor-pointer truncate rounded text-left hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+>
+  {company}
+</button>
             </h3>
 
             <p className="truncate text-sm text-gray-700 dark:text-gray-300">
@@ -93,9 +95,14 @@ useEffect(() => {
       </div>
 
       
-      <span className="hidden font-semibold text-gray-900 dark:text-gray-100 md:block">
-        {company}
-      </span>
+      <button
+  type="button"
+  onClick={() => onOpenDetails(application)}
+  aria-haspopup="dialog"
+  className="hidden cursor-pointer rounded text-left font-semibold text-gray-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-100 md:block"
+>
+  {company}
+</button>
 
       <span className="hidden text-gray-700 dark:text-gray-300 md:block">
         {position}

@@ -13,7 +13,7 @@ function Dashboard() {
   const {t} = useLanguage();
 const {applications, handleStatusChange, scheduleInterview, loading} = useApplications();
 
-const {profile} = useAuth();
+const { user, profile } = useAuth();
 const [interviewApplication, setInterviewApplication] = useState(null);
 
 function handleDashboardStatusChange(id, newStatus) {
@@ -82,7 +82,11 @@ const stats = [
     <section className="p-4 md:p-8">
    
       <div className="mb-6 md:mb-8">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl">{t("dashboard", "title")} {profile?.username} </h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl">
+  {user && profile?.username
+    ? `${t("dashboard", "title")} ${profile.username}`
+    : t("dashboard", "welcome")}
+</h2>
         <p className="mt-1 font-bold text-gray-500 dark:text-gray-400 md:text-base">{t("dashboard", "description")}</p>
       </div>
 

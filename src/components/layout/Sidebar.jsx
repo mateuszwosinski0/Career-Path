@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Logo from "@/components/layout/Logo";
 import {
   LayoutDashboard,
@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
+  const { user, profile } = useAuth();
   const { t } = useLanguage();
  const navItems = [
   {
@@ -30,7 +31,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   },
 ];
 
-  const { profile} = useAuth();
+ 
 
   return (
     <>
@@ -94,10 +95,26 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           </div>
 
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">
-              {profile?.username}
-            </p>
-          </div>
+  <p className="truncate text-sm font-semibold">
+    {user ? profile?.username : t("navigation", "guest")}
+  </p>
+
+  {!user && (
+    <>
+      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        {t("navigation", "guestStorage")}
+      </p>
+
+      <Link
+        to="/login"
+        onClick={() => setSidebarOpen(false)}
+        className="mt-2 inline-flex rounded text-sm font-medium text-blue-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-blue-400 dark:focus-visible:ring-offset-gray-900"
+      >
+        {t("navigation", "signIn")}
+      </Link>
+    </>
+  )}
+</div>
         </div>
       </aside>
     </>

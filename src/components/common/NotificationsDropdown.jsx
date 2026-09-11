@@ -87,7 +87,9 @@ async function handleNotificationClick(notification) {
   onClose();
 
   if (notification.application_id) {
-    navigate(`/applications?highlight=${notification.application_id}`);
+    navigate(
+  `/applications?details=${encodeURIComponent(notification.application_id)}`,
+);
   }
 }
 

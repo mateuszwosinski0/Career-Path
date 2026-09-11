@@ -6,7 +6,7 @@ function ApplicationsList({
   onStatusChange,
   onEdit,
   onDelete,
-  highlightId,
+  onOpenDetails,
 
 }) {
   const { t } = useLanguage();
@@ -35,7 +35,7 @@ function ApplicationsList({
               onStatusChange={onStatusChange}
               onEdit={onEdit}
               onDelete={onDelete}
-              isHighlighted={application.id === highlightId}
+              onOpenDetails={onOpenDetails}
                 
             />
           ))

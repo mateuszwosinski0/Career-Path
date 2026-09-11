@@ -80,6 +80,7 @@ async function updatePassword(newPassword) {
 
 useEffect(() => {
   if (!user) return;
+  let cancelled = false;
 
   async function getProfile() {
     const { data, error } = await supabase
@@ -100,10 +101,13 @@ useEffect(() => {
       return;
     }
 
-    setProfile(data);
+    if (!cancelled) setProfile(data);
   }
 
   getProfile();
+  return () => {
+    cancelled = true;
+  };
 }, [user]);
 
 
@@ -167,7 +171,7 @@ async function updateNotificationSettings(settings) {
 }
     return (
         <AuthContext.Provider 
-        value={{user, profile, loading, signUp, signIn, signOut, resetPassword, updatePassword, updateProfile, updateNotificationSettings,}}>
+        value={{user, profile: user && profile?.id === user.id ? profile : null, loading, signUp, signIn, signOut, resetPassword, updatePassword, updateProfile, updateNotificationSettings,}}>
             {children}
         </AuthContext.Provider>
     )

@@ -2,14 +2,13 @@ import ApplicationsHeader from "@/components/ApplicationsPage/ApplicationsHeader
 import ApplicationsToolbar from "@/components/ApplicationsPage/ApplicationsToolbar";
 import ApplicationsList from "@/components/ApplicationsPage/ApplicationsList";
 import { useApplications } from "@/context/ApplicationsContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditApplicationModal from "@/components/ApplicationsPage/EditApplicationModal";
 import DeleteApplicationModal from "@/components/ApplicationsPage/DeleteApplicationModal";
 import ScheduleInterviewModal from "@/components/ApplicationsPage/ScheduleInterviewModal";
 import { useSearchParams } from "react-router-dom";
 import ApplicationsListSkeleton from "@/components/ApplicationsPage/ApplicationsLIstSkeleton";
-
-
+import ApplicationDetailsPanel from "@/components/ApplicationsPage/ApplicationDetailsPanel";
 function Applications() {
   const { applications, handleStatusChange, deleteApplication, scheduleInterview,loading  } = useApplications();
 
@@ -99,24 +98,36 @@ function handleApplicationStatusChange(id,newStatus) {
 
 
 
-const highlightId = searchParams.get("highlight")
 
-useEffect(() => {
-  if (!highlightId) return;
 
-  const timeout = setTimeout(() => {
-    setSearchParams((current) => {
+
+
+
+const detailsApplicationId =
+  searchParams.get("details") ?? searchParams.get("highlight");
+
+function setDetailsApplicationId(id) {
+  setSearchParams(
+    (current) => {
       const next = new URLSearchParams(current);
+
       next.delete("highlight");
+
+      if (id == null) {
+        next.delete("details");
+      } else {
+        next.set("details", String(id));
+      }
+
       return next;
-    }, { replace: true });
-  }, 3000);
+    },
+    { replace: true },
+  );
+}
 
-  return () => clearTimeout(timeout);
-}, [highlightId, setSearchParams]);
-
-
-
+const detailsApplication = applications.find(
+  (application) => application.id === detailsApplicationId,
+);
 
   return (
     <section className="p-4 md:p-8">
@@ -142,7 +153,10 @@ useEffect(() => {
         onStatusChange={handleApplicationStatusChange}
         onEdit={handleEditApplication}
         onDelete={handeleDeleteClick}
-        highlightId={highlightId}
+       
+        onOpenDetails={(application) =>
+  setDetailsApplicationId(application.id)
+}
           
       />
       )}
@@ -165,10 +179,12 @@ useEffect(() => {
           setIsDeleteModalOpen(false);
           setAplicationToDelete(null);
         }}
-        onConfirm={() => {
-          deleteApplication(applicationToDelete.id);
-          setIsDeleteModalOpen(false);
-          setAplicationToDelete(null);
+        onConfirm={async () => {
+          const success = await deleteApplication(applicationToDelete.id);
+          if (success) {
+            setIsDeleteModalOpen(false);
+            setAplicationToDelete(null);
+          }
         }}
         />
       )}
@@ -189,6 +205,13 @@ useEffect(() => {
           />
         
       )}
+
+      {!loading && detailsApplication && (
+  <ApplicationDetailsPanel
+    application={detailsApplication}
+    onClose={() => setDetailsApplicationId(null)}
+  />
+)}
     </section>
   );
 }

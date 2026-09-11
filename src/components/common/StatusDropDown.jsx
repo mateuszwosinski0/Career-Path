@@ -4,6 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import useClickOutside from "@/hooks/useClickOutside";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import useDropdownKeyboard from "@/hooks/useDropdownKeyboard";
+import useDropdownPosition from "@/hooks/useDropdownPosition";
 const statusOptions = [
   { value: "Applied" },
   { value: "Interview" },
@@ -42,6 +43,7 @@ const { activeIndex, resetActiveIndex } = useDropdownKeyboard({
   value,
   onSelect: handleSelect,
 }); 
+const menuRef = useDropdownPosition(isOpen, dropdownRef, activeIndex);
   function handleSelect(option) {
     onChange(option.value);
     setIsOpen(false);
@@ -78,7 +80,7 @@ const { activeIndex, resetActiveIndex } = useDropdownKeyboard({
       </button>
 
       {isOpen && (
-        <div className="dropdown-in absolute right-0 top-full z-50 mt-2 w-full origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+        <div ref={menuRef} role="listbox" className="dropdown-in absolute right-0 z-50 w-full overflow-y-auto overscroll-contain rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
         {statusOptions.map((option, index) => {
   const status = option.value;
   const isSelected = status === value;

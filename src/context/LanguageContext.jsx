@@ -18,6 +18,9 @@ const translations = {
       dashboard: "Dashboard",
       applications: "Applications",
       settings: "Settings",
+      guest: "Guest",
+guestStorage: "Data saved only in this browser.",
+signIn: "Sign in",
     },
       dashboard: {
       title:  "Welcome back,",
@@ -35,6 +38,7 @@ const translations = {
       noUpcomingInterviews: "No upcoming interviews",
       viewAll : "View all",
       noApplications: "No applications found.",
+      welcome: "Welcome to Career Path!",
     },
 
     applications: {
@@ -77,6 +81,31 @@ addApplicationDescription: "Add a new job application to your tracker.",
 cancelInterview: "Cancel interview",
 interviewDetails: "Interview details",
 noResults: "No applications match your filters.",
+formOfferUrl: "Job posting URL (optional)",
+formLocation: "Location (optional)",
+formWorkMode: "Work mode (optional)",
+notSpecified: "Not specified",
+workModeRemote: "Remote",
+workModeHybrid: "Hybrid",
+workModeOnSite: "On-site",
+formSalaryMin: "Minimum salary (optional)",
+formSalaryMax: "Maximum salary (optional)",
+formSalaryCurrency: "Currency (optional)",
+formSalaryPeriod: "Pay period (optional)",
+salaryMonthly: "Monthly",
+salaryHourly: "Hourly",
+salaryYearly: "Yearly",
+formNotes: "Notes (optional)",
+details: "Application details",
+closeDetails: "Close details",
+detailsLocation: "Location",
+detailsWorkMode: "Work mode",
+detailsOfferUrl: "Job posting",
+openOffer: "Open job posting in a new tab",
+detailsNotes: "Notes",
+detailsSalary: "Salary",
+salaryFrom: "From",
+salaryTo: "Up to",
     },
 
     settings: {
@@ -141,6 +170,7 @@ interviewTypes: {
 },
 
 toast: {
+  invalidAppliedDate: "Enter a valid application date that is today or earlier.",
   statusError: "Failed to change status",
   statusSuccess: "Status changed",
   addError: "Failed to add application",
@@ -153,6 +183,10 @@ toast: {
   scheduleSuccess: "Interview scheduled",
   cancelInterviewError: "Failed to cancel interview",
   cancelInterviewSuccess: "Interview canceled",
+  invalidInterviewDateTime: "Check the interview date and time.",
+  invalidOfferUrl: "Enter a valid URL starting with http:// or https://.",
+invalidSalary: "Salary must be a valid non-negative number.",
+invalidSalaryRange: "Minimum salary cannot exceed maximum salary.",
 
 }
   },
@@ -172,6 +206,9 @@ toast: {
       dashboard: "Pulpit",
       applications: "Aplikacje",
       settings: "Ustawienia",
+      guest: "Gość",
+guestStorage: "Dane zapisane tylko w tej przeglądarce.",
+signIn: "Zaloguj się",
     },
 
     dashboard: {
@@ -189,7 +226,8 @@ toast: {
       upcomingInterviews: "Nadchodzące Rozmowy",
       noUpcomingInterviews: "Brak nadchodzących rozmów",
       viewAll: "Zobacz wszystko",
-      noApplications: "Nie znaleziono aplikacji."
+      noApplications: "Nie znaleziono aplikacji.",
+      welcome: "Witaj w Career Path!",
     },
 
     applications: {
@@ -231,6 +269,31 @@ saveChanges: "Zapisz zmiany",
 scheduleInterview: "Zaplanuj rozmowę",
 addApplicationDescription: "Dodaj nową aplikacje do trackera",
 noResults: "Nie znaleziono aplikacji pasujących do filtrów.",
+formOfferUrl: "Link do oferty (opcjonalnie)",
+formLocation: "Lokalizacja (opcjonalnie)",
+formWorkMode: "Tryb pracy (opcjonalnie)",
+notSpecified: "Nie określono",
+workModeRemote: "Zdalnie",
+workModeHybrid: "Hybrydowo",
+workModeOnSite: "Stacjonarnie",
+formSalaryMin: "Wynagrodzenie od (opcjonalnie)",
+formSalaryMax: "Wynagrodzenie do (opcjonalnie)",
+formSalaryCurrency: "Waluta (opcjonalnie)",
+formSalaryPeriod: "Okres rozliczenia (opcjonalnie)",
+salaryMonthly: "Miesięcznie",
+salaryHourly: "Godzinowo",
+salaryYearly: "Rocznie",
+formNotes: "Notatki (opcjonalnie)",
+details: "Szczegóły aplikacji",
+closeDetails: "Zamknij szczegóły",
+detailsLocation: "Lokalizacja",
+detailsWorkMode: "Tryb pracy",
+detailsOfferUrl: "Oferta pracy",
+openOffer: "Otwórz ofertę w nowej karcie",
+detailsNotes: "Notatki",
+detailsSalary: "Wynagrodzenie",
+salaryFrom: "Od",
+salaryTo: "Do",
     },
 
     settings: {
@@ -292,6 +355,8 @@ interviewTypes: {
 },
 
 toast: {
+  invalidInterviewDateTime: "Sprawdź datę i godzinę rozmowy.",
+  invalidAppliedDate: "Podaj poprawną datę zgłoszenia — nie późniejszą niż dzisiaj.",
   statusError: "Nie udało się zmienić statusu",
   statusSuccess: "Status został zmieniony",
 
@@ -309,6 +374,9 @@ toast: {
 
   cancelInterviewError: "Nie udało się anulować rozmowy",
   cancelInterviewSuccess: "Rozmowa została anulowana",
+  invalidOfferUrl: "Podaj poprawny link zaczynający się od http:// lub https://.",
+invalidSalary: "Wynagrodzenie musi być poprawną liczbą nieujemną.",
+invalidSalaryRange: "Wynagrodzenie od nie może być większe niż wynagrodzenie do.",
 },
   },
 
@@ -329,6 +397,9 @@ es: {
     dashboard: "Panel",
     applications: "Solicitudes",
     settings: "Configuración",
+    guest: "Invitado",
+guestStorage: "Los datos se guardan solo en este navegador.",
+signIn: "Iniciar sesión",
   },
 
   applications: {
@@ -377,6 +448,31 @@ es: {
     cancelInterview: "Cancelar entrevista",
     interviewDetails: "Detalles de la entrevista",
     noResults: "No hay solicitudes que coincidan con los filtros.",
+    formOfferUrl: "Enlace a la oferta (opcional)",
+    formLocation: "Ubicación (opcional)",
+formWorkMode: "Modalidad de trabajo (opcional)",
+notSpecified: "Sin especificar",
+workModeRemote: "Remoto",
+workModeHybrid: "Híbrido",
+workModeOnSite: "Presencial",
+formSalaryMin: "Salario mínimo (opcional)",
+formSalaryMax: "Salario máximo (opcional)",
+formSalaryCurrency: "Moneda (opcional)",
+formSalaryPeriod: "Periodo de pago (opcional)",
+salaryMonthly: "Mensual",
+salaryHourly: "Por hora",
+salaryYearly: "Anual",
+formNotes: "Notas (opcional)",
+details: "Detalles de la candidatura",
+closeDetails: "Cerrar detalles",
+detailsLocation: "Ubicación",
+detailsWorkMode: "Modalidad de trabajo",
+detailsOfferUrl: "Oferta de empleo",
+openOffer: "Abrir oferta en una pestaña nueva",
+detailsNotes: "Notas",
+detailsSalary: "Salario",
+salaryFrom: "Desde",
+salaryTo: "Hasta",
   },
 
 
@@ -467,6 +563,7 @@ closeModal: "Cerrar ventana",
     upcomingInterviews: "Próximas entrevistas",
     noUpcomingInterviews: "No hay próximas entrevistas.",
     viewAll: "Ver todo",
+    welcome: "¡Bienvenido a Career Path!",
   },
   notifications: {
   title: "Notificaciones",
@@ -485,6 +582,8 @@ interviewTypes: {
   onSite: "Presencial",
 },
 toast: {
+  invalidInterviewDateTime: "Comprueba la fecha y la hora de la entrevista.",
+  invalidAppliedDate: "Introduce una fecha de candidatura válida que no sea posterior a hoy.",
   statusError: "No se pudo cambiar el estado",
   statusSuccess: "El estado ha sido actualizado",
 
@@ -502,6 +601,9 @@ toast: {
 
   cancelInterviewError: "No se pudo cancelar la entrevista",
   cancelInterviewSuccess: "La entrevista ha sido cancelada",
+  invalidOfferUrl: "Introduce un enlace válido que empiece por http:// o https://.",
+invalidSalary: "El salario debe ser un número válido no negativo.",
+invalidSalaryRange: "El salario mínimo no puede superar el máximo.",
 },
 },
 };
